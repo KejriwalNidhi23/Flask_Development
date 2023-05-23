@@ -1,16 +1,39 @@
 ## Integrate HTML with Flask
-## HTTP verb GET and POST
+## HTTP verb GET and POST 
 
+## Jinja templates
+'''
+{%...%} conditions, for loops
+
+Sample Code: 
+Case 1: Whenever there is an integer value passed here
+{% if result>=50 %} 
+<h1>Your result is passed</h1>
+{% else %}
+<h1>Your result is failed</h1>
+{% endif %}
+
+Case 2: Whenever there is a dictionary item as an input, Iterating dictionary and printing values in the form of table 
+<table border=2>
+    {% for key, value in result.items() %}
+    <tr>
+        <th>{{ key }}</th>
+        <th>{{ value }}</th>
+    </tr>
+    {% endfor %}
+</table>
+
+{{  }} expressions to print output
+{#...#} this is for comments
+'''
 
 from flask import Flask, redirect, url_for, render_template, request
 
 app = Flask(__name__)
 
-
 @app.route('/')
 def welcome():
     return render_template('index.html')
-
 
 # Result checker html page
 @app.route('/submit',methods=['POST','GET'])
@@ -25,15 +48,15 @@ def submit():
     
     return redirect(url_for('success',score=total_score))
 
-
 @app.route('/success/<int:score>')
 def success(score):
     res = ""
-    if score >=50:
+    if float(score) >=50:
         res = 'PASS'
     else:
         res = 'FAIL'
-    return render_template('result.html',result=res)
+    exp = {'score':score, 'res':res}
+    return render_template('result.html',result=exp)
 
 
 
